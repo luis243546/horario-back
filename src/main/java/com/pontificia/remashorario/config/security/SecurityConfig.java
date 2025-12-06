@@ -261,13 +261,22 @@ public class SecurityConfig {
                         // ==================== ENDPOINTS SOLO PARA ADMINS ====================
 
                         // ✅ Solo administradores pueden aprobar/modificar asistencias
-                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/approve")
+//                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/approve")
+//                        .hasAnyRole("ASSISTANT", "COORDINATOR")
+//                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/override")
+//                        .hasAnyRole("ASSISTANT", "COORDINATOR")
+//                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/mark-holiday")
+//                        .hasAnyRole("ASSISTANT", "COORDINATOR")
+//                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/reject")
+//                        .hasAnyRole("ASSISTANT", "COORDINATOR")
+
+                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/approve")
                         .hasAnyRole("ASSISTANT", "COORDINATOR")
-                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/override")
+                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/override")
                         .hasAnyRole("ASSISTANT", "COORDINATOR")
-                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/mark-holiday")
+                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/mark-holiday")
                         .hasAnyRole("ASSISTANT", "COORDINATOR")
-                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/reject")
+                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/reject")
                         .hasAnyRole("ASSISTANT", "COORDINATOR")
 
                         // ==================== DISPONIBILIDADES DE DOCENTES ====================

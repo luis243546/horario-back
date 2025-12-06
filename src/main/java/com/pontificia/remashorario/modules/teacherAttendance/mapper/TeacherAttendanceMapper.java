@@ -1,6 +1,7 @@
 package com.pontificia.remashorario.modules.teacherAttendance.mapper;
 
 import com.pontificia.remashorario.modules.attendanceActivityType.mapper.AttendanceActivityTypeMapper;
+import com.pontificia.remashorario.modules.classSession.mapper.ClassSessionMapper;
 import com.pontificia.remashorario.modules.teacher.mapper.TeacherMapper;
 import com.pontificia.remashorario.modules.teacherAttendance.TeacherAttendanceEntity;
 import com.pontificia.remashorario.modules.teacherAttendance.TeacherAttendanceService;
@@ -20,6 +21,7 @@ public class TeacherAttendanceMapper {
 
     private final AttendanceActivityTypeMapper activityTypeMapper;
     private final TeacherMapper teacherMapper;
+    private final ClassSessionMapper classSessionMapper;
 
     public TeacherAttendanceResponseDTO toResponseDTO(TeacherAttendanceEntity entity) {
         if (entity == null) return null;
@@ -29,7 +31,8 @@ public class TeacherAttendanceMapper {
         return TeacherAttendanceResponseDTO.builder()
                 .uuid(entity.getUuid())
                 .teacher(teacherMapper.toResponseDTO(entity.getTeacher()))
-                .classSessionUuid(entity.getClassSession() != null ? entity.getClassSession().getUuid() : null)
+                .classSession(entity.getClassSession() != null ? // ✅ CAMBIAR ESTA LÍNEA
+                        classSessionMapper.toResponseDTO(entity.getClassSession()) : null)
                 .activityType(activityTypeMapper.toResponseDTO(entity.getAttendanceActivityType()))
                 .attendanceDate(entity.getAttendanceDate())
                 .scheduledStartTime(entity.getScheduledStartTime())

@@ -181,13 +181,56 @@ public class TeacherAttendanceService extends BaseService<TeacherAttendanceEntit
         return save(attendance);
     }
 
+//    /**
+//     * Teacher checks out
+//     * Calculates actual duration and early departure if applicable
+//     */
+//    @Transactional
+//    public TeacherAttendanceEntity checkOut(UUID attendanceUuid) {
+//        TeacherAttendanceEntity attendance = findAttendanceOrThrow(attendanceUuid);
+//
+//        if (attendance.getCheckinAt() == null) {
+//            throw new IllegalStateException("No se puede marcar salida sin haber marcado entrada");
+//        }
+//
+//        if (attendance.getCheckoutAt() != null) {
+//            throw new IllegalStateException("Ya se marcó la salida para esta asistencia");
+//        }
+//
+//        LocalDateTime checkoutTime = LocalDateTime.now();
+//        attendance.setCheckoutAt(checkoutTime);
+//
+//        // Calculate actual duration
+//        long actualMinutes = Duration.between(attendance.getCheckinAt(), checkoutTime).toMinutes();
+//        attendance.setActualDurationMinutes((int) actualMinutes);
+//
+//        // Calculate early departure if scheduled end time is set
+//        if (attendance.getScheduledEndTime() != null) {
+//            LocalTime actualCheckoutTime = checkoutTime.toLocalTime();
+//            int earlyDepartureMinutes = calculateEarlyDepartureMinutes(
+//                    attendance.getScheduledEndTime(), actualCheckoutTime);
+//            attendance.setEarlyDepartureMinutes(earlyDepartureMinutes);
+//        }
+//
+//        // Auto-approve if no penalties
+//        if (attendance.getLateMinutes() == 0 && attendance.getEarlyDepartureMinutes() == 0) {
+//            attendance.setStatus(TeacherAttendanceEntity.AttendanceStatus.APPROVED);
+//        }
+//
+//        return save(attendance);
+//    }
+
     /**
      * Teacher checks out
      * Calculates actual duration and early departure if applicable
      */
     @Transactional
     public TeacherAttendanceEntity checkOut(UUID attendanceUuid) {
-        TeacherAttendanceEntity attendance = findAttendanceOrThrow(attendanceUuid);
+        // ✅ CARGAR CON TODAS LAS RELACIONES para evitar LazyInitializationException
+        TeacherAttendanceEntity attendance = attendanceRepository.findByIdWithDetails(attendanceUuid)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Asistencia no encontrada con UUID: %s", attendanceUuid)
+                ));
 
         if (attendance.getCheckinAt() == null) {
             throw new IllegalStateException("No se puede marcar salida sin haber marcado entrada");
@@ -215,10 +258,13 @@ public class TeacherAttendanceService extends BaseService<TeacherAttendanceEntit
         // Auto-approve if no penalties
         if (attendance.getLateMinutes() == 0 && attendance.getEarlyDepartureMinutes() == 0) {
             attendance.setStatus(TeacherAttendanceEntity.AttendanceStatus.APPROVED);
+        } else {
+            attendance.setStatus(TeacherAttendanceEntity.AttendanceStatus.PENDING);
         }
 
         return save(attendance);
     }
+
 
     /**
      * Calculate late minutes with tolerance

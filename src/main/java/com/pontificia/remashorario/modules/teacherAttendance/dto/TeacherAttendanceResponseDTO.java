@@ -1,6 +1,7 @@
 package com.pontificia.remashorario.modules.teacherAttendance.dto;
 
 import com.pontificia.remashorario.modules.attendanceActivityType.dto.AttendanceActivityTypeResponseDTO;
+import com.pontificia.remashorario.modules.classSession.dto.ClassSessionResponseDTO;
 import com.pontificia.remashorario.modules.teacher.dto.TeacherResponseDTO;
 import com.pontificia.remashorario.modules.teacherAttendance.TeacherAttendanceEntity;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import java.util.UUID;
 public class TeacherAttendanceResponseDTO {
     private UUID uuid;
     private TeacherResponseDTO teacher;
-    private UUID classSessionUuid;
+    private ClassSessionResponseDTO classSession;
     private AttendanceActivityTypeResponseDTO activityType;
     private LocalDate attendanceDate;
     private LocalTime scheduledStartTime;

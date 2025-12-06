@@ -79,4 +79,21 @@ public interface TeacherAttendanceRepository extends BaseRepository<TeacherAtten
             "AND ta.status = 'PENDING' " +
             "ORDER BY ta.attendanceDate ASC")
     List<TeacherAttendanceEntity> findPendingAttendancesByTeacher(@Param("teacherUuid") UUID teacherUuid);
+
+
+    /**
+     * Find attendance by UUID with all relationships eagerly loaded
+     * This prevents LazyInitializationException when mapping to DTO
+     */
+    @Query("SELECT ta FROM TeacherAttendanceEntity ta " +
+            "LEFT JOIN FETCH ta.teacher t " +
+            "LEFT JOIN FETCH t.department " +
+            "LEFT JOIN FETCH ta.classSession cs " +
+            "LEFT JOIN FETCH cs.course " +
+            "LEFT JOIN FETCH cs.studentGroup " +
+            "LEFT JOIN FETCH cs.sessionType " +
+            "LEFT JOIN FETCH ta.attendanceActivityType " +
+            "WHERE ta.uuid = :uuid")
+    Optional<TeacherAttendanceEntity> findByIdWithAllDetails(@Param("uuid") UUID uuid);
+
 }
