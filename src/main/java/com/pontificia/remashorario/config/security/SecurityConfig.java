@@ -43,7 +43,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // ==================== PERFIL DE USUARIO ====================
-                        .requestMatchers("/api/protected/me/**").hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR")
+                        .requestMatchers("/api/protected/me/**")
+                        .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR", "ACCOUNTANT")
 
                         // ==================== PERÍODOS ACADÉMICOS ====================
                         .requestMatchers(HttpMethod.GET, "/api/protected/periods/active")
@@ -54,6 +55,30 @@ public class SecurityConfig {
                         // ✅ Docentes pueden ver sus propias clases asignadas
                         .requestMatchers(HttpMethod.GET, "/api/protected/class-sessions/teacher/**")
                         .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR")
+
+                        // Asistencias - Contador puede ver y gestionar
+                        .requestMatchers(HttpMethod.GET, "/api/protected/teacher-attendances/**")
+                       .hasAnyRole("ASSISTANT", "COORDINATOR", "ACCOUNTANT")
+
+                        // Aprobar/modificar asistencias
+                       .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/approve")
+                       .hasAnyRole("ASSISTANT", "COORDINATOR", "ACCOUNTANT")
+
+                       // Acceso a nómina
+                      .requestMatchers("/api/protected/payroll-periods/**")
+                      .hasAnyRole("ASSISTANT", "COORDINATOR", "ACCOUNTANT")
+
+                      .requestMatchers("/api/protected/payroll-lines/**")
+                      .hasAnyRole("ASSISTANT", "COORDINATOR", "ACCOUNTANT")
+
+                     // Gestión de tarifas (solo lectura para ACCOUNTANT)
+                    .requestMatchers(HttpMethod.GET, "/api/protected/teacher-rates/**")
+                     .hasAnyRole("ASSISTANT", "COORDINATOR", "ACCOUNTANT")
+
+
+                     // Modificar tarifas (solo COORDINATOR y ACCOUNTANT)
+                     .requestMatchers(HttpMethod.POST, "/api/protected/teacher-rates/**")
+                     .hasAnyRole("COORDINATOR", "ACCOUNTANT")
 
                         // ✅ Docentes pueden gestionar su propia asistencia
                         .requestMatchers(HttpMethod.GET, "/api/protected/teacher-attendances/teacher/**")

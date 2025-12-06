@@ -38,7 +38,8 @@ public class UserEntity extends BaseEntity {
     public enum UserRole {
         COORDINATOR("Coordinador General"),
         ASSISTANT("Administrador"),
-        TEACHER("Docente");
+        TEACHER("Docente"),
+        ACCOUNTANT("Contador");
 
         private final String displayName;
 
