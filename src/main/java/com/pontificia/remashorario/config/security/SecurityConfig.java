@@ -64,7 +64,7 @@ public class SecurityConfig {
                         .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR")
 
                         // ✅✅ CORREGIDO: Usar ** en lugar de * para el UUID
-                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/**/check-out")
+                        .requestMatchers(HttpMethod.PATCH, "/api/protected/teacher-attendances/*/check-out")
                         .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR")
 
                         // ✅ Docentes pueden consultar feriados
