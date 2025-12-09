@@ -215,7 +215,7 @@ public class SecurityConfig {
 
                         // ✅ Docentes pueden ver sus propias clases asignadas
                         .requestMatchers(HttpMethod.GET, "/api/protected/class-sessions/teacher/**")
-                        .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR")
+                        .hasAnyRole("TEACHER", "ASSISTANT", "COORDINATOR","ACCOUNTANT")
 
                         // ✅ Docentes pueden gestionar su propia asistencia (ESPECÍFICO)
                         .requestMatchers(HttpMethod.GET, "/api/protected/teacher-attendances/teacher/**")
@@ -289,7 +289,7 @@ public class SecurityConfig {
 
                         // ==================== OTROS ENDPOINTS PROTEGIDOS ====================
                         .requestMatchers("/api/protected/**")
-                        .hasAnyRole("TEACHER", "COORDINATOR", "ASSISTANT")
+                        .hasAnyRole("TEACHER", "COORDINATOR", "ASSISTANT", "ACCOUNTANT")
 
                         // ==================== CUALQUIER OTRA PETICIÓN ====================
                         .anyRequest().authenticated()
